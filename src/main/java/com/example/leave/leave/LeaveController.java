@@ -1,6 +1,8 @@
 package com.example.leave.leave;
 
 import com.example.leave.common.ApiResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +17,8 @@ import java.util.Map;
 @RequestMapping("/leave")
 public class LeaveController {
 
+    private static final Logger log = LoggerFactory.getLogger(LeaveController.class);
+
     private final LeaveService service;
 
     public LeaveController(LeaveService service) {
@@ -25,8 +29,10 @@ public class LeaveController {
     public ResponseEntity<ApiResponse<Map<String, Object>>> balance(
             @RequestHeader(value = "X-User-Id", required = false) String userId) {
         if (userId == null) {
+            log.warn("GET /leave/balance — 缺少 X-User-Id");
             return ResponseEntity.status(401).body(ApiResponse.<Map<String, Object>>fail(401, "未登录或会话已过期"));
         }
+        log.info("GET /leave/balance  [user={}]", userId);
         return ResponseEntity.ok(service.balance(userId));
     }
 
@@ -35,8 +41,11 @@ public class LeaveController {
             @RequestHeader(value = "X-User-Id", required = false) String userId,
             @RequestBody Map<String, String> body) {
         if (userId == null) {
+            log.warn("POST /leave/applications — 缺少 X-User-Id");
             return ResponseEntity.status(401).body(ApiResponse.<Map<String, Object>>fail(401, "未登录或会话已过期"));
         }
+        log.info("POST /leave/applications  [user={}]  start={} end={} reason={}",
+                userId, body.get("start_date"), body.get("end_date"), body.get("reason"));
         return ResponseEntity.ok(service.submit(userId, body));
     }
 }
