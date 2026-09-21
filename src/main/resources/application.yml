@@ -1,0 +1,8 @@
+server:
+  port: 8080
+
+leave:
+  mock:
+    users:
+      - { username: zhangsan, emp-name: 张三, annual-balance: 5 }
+      - { username: lisi,     emp-name: 李四, annual-balance: 0 }
