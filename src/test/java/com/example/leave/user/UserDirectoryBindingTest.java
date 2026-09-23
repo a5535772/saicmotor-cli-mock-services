@@ -15,7 +15,7 @@ class UserDirectoryBindingTest {
     void bindsUsersFromYaml() {
         var users = userDirectory.getUsers();
         assertNotNull(users);
-        assertEquals(2, users.size());
+        assertEquals(3, users.size());
         assertEquals("zhangsan", users.get(0).username());
         assertEquals("张三", users.get(0).empName());
         assertEquals(5, users.get(0).annualBalance());
